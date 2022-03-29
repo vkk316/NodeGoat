@@ -20,19 +20,43 @@ const USERS_TO_INSERT = [
         "isAdmin": true
     }, {
         "_id": 2,
-        "userName": "user1",
-        "firstName": "John",
-        "lastName": "Doe",
+        "userName": "6210110097",
+        "firstName": "ณภัทร",
+        "lastName": "บริรักษ์กิจดำรง",
         "benefitStartDate": "2030-01-10",
-        "password": "User1_123"
+        "password": "kokowa_aeiou"
         // "password" : "$2a$10$RNFhiNmt2TTpVO9cqZElb.LQM9e1mzDoggEHufLjAnAKImc6FNE86",// User1_123
     }, {
         "_id": 3,
-        "userName": "user2",
-        "firstName": "Will",
-        "lastName": "Smith",
+        "userName": "6210110107",
+        "firstName": "ณัฐนัย",
+        "lastName": "ยาพระจันทร์",
         "benefitStartDate": "2025-11-30",
-        "password": "User2_123"
+        "password": "kokowa_aeiou"
+        //"password" : "$2a$10$Tlx2cNv15M0Aia7wyItjsepeA8Y6PyBYaNdQqvpxkIUlcONf1ZHyq", // User2_123
+    }, {
+        "_id": 4,
+        "userName": "6210110431",
+        "firstName": "อาฟิตดีน",
+        "lastName": "สะมะแอ",
+        "benefitStartDate": "2025-11-30",
+        "password": "kokowa_aeiou"
+        //"password" : "$2a$10$Tlx2cNv15M0Aia7wyItjsepeA8Y6PyBYaNdQqvpxkIUlcONf1ZHyq", // User2_123
+    }, {
+        "_id": 5,
+        "userName": "6210110502",
+        "firstName": "นพนนท์",
+        "lastName": "ลิ่มสกุล",
+        "benefitStartDate": "2025-11-30",
+        "password": "kokowa_aeiou"
+        //"password" : "$2a$10$Tlx2cNv15M0Aia7wyItjsepeA8Y6PyBYaNdQqvpxkIUlcONf1ZHyq", // User2_123
+    }, {
+        "_id": 6,
+        "userName": "6210110747",
+        "firstName": "ณัฐธิดา",
+        "lastName": "คลองเเค",
+        "benefitStartDate": "2025-11-30",
+        "password": "kokowa_aeiou"
         //"password" : "$2a$10$Tlx2cNv15M0Aia7wyItjsepeA8Y6PyBYaNdQqvpxkIUlcONf1ZHyq", // User2_123
     }];
 
