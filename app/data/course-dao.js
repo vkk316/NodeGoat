@@ -11,34 +11,31 @@ function CourseDAO(db) {
     const coursesDB = db.collection("courses");
     const userDAO = new UserDAO(db);
 
-    this.update = (userId, courseID, courseStatus, callback) => { //update field
-        const parsedUserId = parseInt(userId);
+    this.update = (userId, courseId, course_status,callback) => {
+        var payload = {} //update field
 
-        // Create contributions document
-        const courses = {
-            status: courseStatus
-        };
+        console.log(userId)
+        console.log(courseId)
+        console.log(course_status)
 
-        coursesDB.update({
-            userId,
-            courseID
-            },
-            courses,
-            err => {
-                if (!err) {
-                    console.log("Updated courses");
-                    // add user details
-                    this.getByUserId(parsedUserId, (err, c) => {
+        coursesDB.update({userId: userId, course_id: courseId},
+            {$set :{status: course_status}},err => {
+                if(!err){
+                    userDAO.getUserById(userId, (err, user) => {
 
                         if (err) return callback(err, null);
-
-                        return callback(null, c);
+        
+                        payload.userName = user.userName;
+                        payload.firstName = user.firstName;
+                        payload.lastName = user.lastName;
+                        payload.userId = userId+"";
+        
+                        return callback(null, payload);
                     });
-                } else {
+                }else{
                     return callback(err, null);
                 }
-            }
-        );
+            })
     };
 
     this.getByUserId = (userId, callback) => {

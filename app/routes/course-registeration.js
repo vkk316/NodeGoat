@@ -14,7 +14,6 @@ function CourseRegisterationHandler(db) {
         } = req.session;
 
         courseDAO.getByUserId(userId, (error, courses) => {
-            console.log(courses);
             if (error) return next(error);
 
             courses.userId = userId; //set for nav menu items
@@ -26,28 +25,20 @@ function CourseRegisterationHandler(db) {
     };
 
     this.handleCourseRegisterationUpdate = (req, res, next) => {
-
         const {
             userId
         } = req.session;
-        const {
-            courseID
-        } = req.body.course_id;
-        const {
-            courseStatus
-        } = req.body.status;
 
-        courseDAO.update(userId, courseID, courseStatus, (err, courses) => {
+        courseDAO.update(parseInt(userId), req.body.course_id, req.body.status, (error, courses) => {
+            if (error) return next(error);
 
-            if (err) return next(err);
-
+            courses.userId = userId; //set for nav menu items
             return res.render("courses", {
-                courses,
+                ...courses,
                 environmentalScripts
             });
         });
-
-    };
+    }
 
 }
 

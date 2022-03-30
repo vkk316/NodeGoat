@@ -15,7 +15,6 @@
 
 
                 <div class="table-responsive">
-                    <form method="POST" action="/courses">
                         <table class="table table-bordered table-hover tablesorter">
                             <thead>
                                 <tr>
@@ -23,6 +22,7 @@
                                     <th>ชื่อวิชา</th>
                                     <th>หน่วยกิต</th>
                                     <th>สถานะ</th>
+                                    <th>Withdraw?</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -31,7 +31,14 @@
                                     <td>{{ c['course_id'] }}</td>
                                     <td>{{ c['title'] }}</td>
                                     <td>{{ c['credit'] }}</td>
-                                    <td>{{ c['status'] }}</td>
+                                    {% if c['status'] == "OK" %}
+                                    <td style="color:green;">{{ c['status'] }}</td>
+                                    <td><form action="/courses" method="post"><input type="hidden" name="course_id" value={{c.course_id}}><button type="submit" name="status" value="W" class="btn btn-warning ">ถอน</button></form></td> 
+                                    {% endif %}
+                                    {% if c['status'] == "W" %}
+                                    <td style="color:orangered;">{{ c['status'] }}</td>
+                                    <td><button type="button" class="btn btn-secondary" disabled>ถอน</button></td> 
+                                    {% endif %}
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -41,8 +48,6 @@
                         <input type="hidden" name="_csrf" value="{{csrftoken}}"></input>
                         -->
                         <button type="button" class="btn btn-default" disabled>เพิ่มรายวิชา</button>
-
-                    </form>
                 </div>
             </div>
 
