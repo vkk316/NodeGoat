@@ -1,64 +1,48 @@
-const ContributionsDAO = require("../data/contributions-dao").ContributionsDAO;
+const CourseDAO = require("../data/course-dao").CourseDAO;
 const {
     environmentalScripts
 } = require("../../config/config");
 
-function ContributionsHandler(db) {
+function CourseRegisterationHandler(db) {
     "use strict";
 
-    const contributionsDAO = new ContributionsDAO(db);
+    const courseDAO = new CourseDAO(db);
 
-    this.displayContributions = (req, res, next) => {
+    this.displayCourses = (req, res, next) => {
         const {
             userId
         } = req.session;
 
-        contributionsDAO.getByUserId(userId, (error, contrib) => {
+        courseDAO.getByUserId(userId, (error, courses) => {
+            console.log(courses);
             if (error) return next(error);
 
-            contrib.userId = userId; //set for nav menu items
-            return res.render("contributions", {
-                ...contrib,
+            courses.userId = userId; //set for nav menu items
+            return res.render("courses", {
+                ...courses,
                 environmentalScripts
             });
         });
     };
 
-    this.handleContributionsUpdate = (req, res, next) => {
+    this.handleCourseRegisterationUpdate = (req, res, next) => {
 
-        const preTax = eval(req.body.preTax);
-        const afterTax = eval(req.body.afterTax);
-        const roth = eval(req.body.roth);
         const {
             userId
         } = req.session;
+        const {
+            courseID
+        } = req.body.course_id;
+        const {
+            courseStatus
+        } = req.body.status;
 
-        //validate contributions
-        const validations = [isNaN(preTax), isNaN(afterTax), isNaN(roth), preTax < 0, afterTax < 0, roth < 0]
-        const isInvalid = validations.some(validation => validation)
-        if (isInvalid) {
-            return res.render("contributions", {
-                updateError: "Invalid contribution percentages",
-                userId,
-                environmentalScripts
-            });
-        }
-        // Prevent more than 30% contributions
-        if (preTax + afterTax + roth > 30) {
-            return res.render("contributions", {
-                updateError: "Contribution percentages cannot exceed 30 %",
-                userId,
-                environmentalScripts
-            });
-        }
-
-        contributionsDAO.update(userId, preTax, afterTax, roth, (err, contributions) => {
+        courseDAO.update(userId, courseID, courseStatus, (err, courses) => {
 
             if (err) return next(err);
 
-            contributions.updateSuccess = true;
-            return res.render("contributions", {
-                ...contributions,
+            return res.render("courses", {
+                courses,
                 environmentalScripts
             });
         });
@@ -67,4 +51,4 @@ function ContributionsHandler(db) {
 
 }
 
-module.exports = ContributionsHandler;
+module.exports = CourseRegisterationHandler;

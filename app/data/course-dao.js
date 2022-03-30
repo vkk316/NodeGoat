@@ -11,37 +11,28 @@ function CourseDAO(db) {
     const coursesDB = db.collection("courses");
     const userDAO = new UserDAO(db);
 
-    this.update = (userId, preTax, afterTax, roth, callback) => { //update field
+    this.update = (userId, courseID, courseStatus, callback) => { //update field
         const parsedUserId = parseInt(userId);
 
         // Create contributions document
         const courses = {
-            userId: parsedUserId,
-            preTax: preTax,
-            afterTax: afterTax,
-            roth: roth
+            status: courseStatus
         };
 
         coursesDB.update({
-            userId
+            userId,
+            courseID
             },
-            contributions, {
-                upsert: true //may constain
-            },
+            courses,
             err => {
                 if (!err) {
                     console.log("Updated courses");
                     // add user details
-                    userDAO.getUserById(parsedUserId, (err, user) => {
+                    this.getByUserId(parsedUserId, (err, c) => {
 
                         if (err) return callback(err, null);
 
-                        courses.userName = user.userName;
-                        courses.firstName = user.firstName;
-                        courses.lastName = user.lastName;
-                        courses.userId = userId;
-
-                        return callback(null, courses);
+                        return callback(null, c);
                     });
                 } else {
                     return callback(err, null);
@@ -51,32 +42,23 @@ function CourseDAO(db) {
     };
 
     this.getByUserId = (userId, callback) => {
-        coursesDB.findOne({
-                userId: userId
-            },
-            (err, courses) => {
+        let payload = {};
+        coursesDB.find({userId: userId}).toArray((err, c) => {
+            if (err) return callback(err, null);
+            //if (!courses) return callback("ERROR: No memos found", null);
+            userDAO.getUserById(userId, (err, user) => {
+
                 if (err) return callback(err, null);
 
-                // Set defualt courses if not set
-                courses = courses || {
-                    preTax: 2,
-                    afterTax: 2,
-                    roth: 2
-                };
+                payload.userName = user.userName;
+                payload.firstName = user.firstName;
+                payload.lastName = user.lastName;
+                payload.userId = userId;
+                payload.data = c;
 
-                // add user details
-                userDAO.getUserById(userId, (err, user) => {
-
-                    if (err) return callback(err, null);
-                    courses.userName = user.userName;
-                    courses.firstName = user.firstName;
-                    courses.lastName = user.lastName;
-                    courses.userId = userId;
-
-                    callback(null, courses);
-                });
-            }
-        );
+                return callback(null, payload);
+            });
+        });
     };
 }
 

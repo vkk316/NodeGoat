@@ -60,6 +60,73 @@ const USERS_TO_INSERT = [
         //"password" : "$2a$10$Tlx2cNv15M0Aia7wyItjsepeA8Y6PyBYaNdQqvpxkIUlcONf1ZHyq", // User2_123
     }];
 
+    const COURSE_TO_INSERT = [
+        {
+            "_id": 1,
+            "course_id": "240-302",
+            "title": "ปฏิบัติการวิศวกรรมคอมพิวเตอร์ขั้นสูง 2",
+            "credit": "1(0-3-0)",
+            "status": "C",
+            "userId": 5
+        },
+        {
+            "_id": 2,
+            "course_id": "240-309",
+            "title": "ไมโครคอนโทรลเลอร์และการเชื่อมต่อ",
+            "credit": "3(3-0-6)",
+            "status": "C",
+            "userId": 5
+        },
+        {
+            "_id": 3,
+            "course_id": "240-310",
+            "title": "การออกแบบและวิเคราะห์ขั้นตอนวิธี",
+            "credit": "3(3-0-6)",
+            "status": "C",
+            "userId": 5
+        },
+        {
+            "_id": 4,
+            "course_id": "240-311",
+            "title": "คอมพิวเตอร์แบบกระจายและเทคโนโลยีเว็บ",
+            "credit": "3(3-0-6)",
+            "status": "C",
+            "userId": 5
+        },
+        {
+            "_id": 5,
+            "course_id": "240-312",
+            "title": "ความมั่นคงของคอมพิวตอร์",
+            "credit": "3(3-0-6)",
+            "status": "C",
+            "userId": 5
+        },
+        {
+            "_id": 6,
+            "course_id": "240-212",
+            "title": "ความน่าจะเป็นและสถิติ",
+            "credit": "3(3-0-6)",
+            "status": "C",
+            "userId": 5
+        },
+        {
+            "_id": 7,
+            "course_id": "240-214",
+            "title": "การสื่อสารข้อมูลและเครือข่าย",
+            "credit": "3(3-0-6)",
+            "status": "C",
+            "userId": 5
+        },
+        {
+            "_id": 8,
+            "course_id": "200-107",
+            "title": "การเชื่อมต่อสรรพสิ่งเพื่อชีวิตยุคดิจิทัล",
+            "credit": "2(2-0-4)",
+            "status": "C",
+            "userId": 5
+        },
+    ];
+
 const tryDropCollection = (db, name) => {
     return new Promise((resolve, reject) => {
         db.dropCollection(name, (err, data) => {
@@ -107,6 +174,7 @@ MongoClient.connect(db, (err, db) =>  {
     // Wait for all drops to finish (or fail) before continuing
     Promise.all(dropPromises).then(() => {
         const usersCol = db.collection("users");
+        const coursesCol = db.collection("courses");
         const allocationsCol = db.collection("allocations");
         const countersCol = db.collection("counters");
 
@@ -121,6 +189,7 @@ MongoClient.connect(db, (err, db) =>  {
         // insert admin and test users
         console.log("Users to insert:");
         USERS_TO_INSERT.forEach((user) => console.log(JSON.stringify(user)));
+
 
         usersCol.insertMany(USERS_TO_INSERT, (err, data) => {
             const finalAllocations = [];
@@ -153,6 +222,14 @@ MongoClient.connect(db, (err, db) =>  {
                 console.log("Database reset performed successfully")
                 process.exit(0);
             });
+
+            coursesCol.insertMany(COURSE_TO_INSERT, (err, data) => {
+                if (err) {
+                    console.log("ERROR: insertMany");
+                    console.log(JSON.stringify(err));
+                    process.exit(1);
+                }
+            })
 
         });
     });

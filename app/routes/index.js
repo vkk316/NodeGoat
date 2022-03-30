@@ -1,7 +1,7 @@
 const SessionHandler = require("./session");
 const ProfileHandler = require("./profile");
 const BenefitsHandler = require("./benefits");
-const ContributionsHandler = require("./contributions");
+const CourseRegisterationHandler = require("./course-registeration");
 const AllocationsHandler = require("./allocations");
 const MemosHandler = require("./memos");
 const ResearchHandler = require("./research");
@@ -17,7 +17,7 @@ const index = (app, db) => {
     const sessionHandler = new SessionHandler(db);
     const profileHandler = new ProfileHandler(db);
     const benefitsHandler = new BenefitsHandler(db);
-    const contributionsHandler = new ContributionsHandler(db);
+    const courseRegisterationHandler = new CourseRegisterationHandler(db);
     const allocationsHandler = new AllocationsHandler(db);
     const memosHandler = new MemosHandler(db);
     const researchHandler = new ResearchHandler(db);
@@ -50,8 +50,8 @@ const index = (app, db) => {
     app.post("/profile", isLoggedIn, profileHandler.handleProfileUpdate);
 
     // Contributions Page
-    app.get("/contributions", isLoggedIn, contributionsHandler.displayContributions);
-    app.post("/contributions", isLoggedIn, contributionsHandler.handleContributionsUpdate);
+    app.get("/courses", isLoggedIn, courseRegisterationHandler.displayCourses);
+    app.post("/courses", isLoggedIn, courseRegisterationHandler.handleCourseRegisterationUpdate);
 
     // Benefits Page
     app.get("/benefits", isLoggedIn, benefitsHandler.displayBenefits);
